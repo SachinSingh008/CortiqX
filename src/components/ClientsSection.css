@@ -1,0 +1,148 @@
+/* Clients — CortiqX-style logo marquee, themed with fyw tokens */
+
+.fyw-clients {
+  background: var(--fyw-surface);
+  border-top: 1px solid var(--fyw-border);
+  overflow: hidden;
+}
+
+.fyw-clients__marquee-wrap {
+  overflow: hidden;
+  margin-top: 8px;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+}
+
+.fyw-clients__marquee {
+  width: 100%;
+}
+
+.fyw-clients__track {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.75rem, 4vw, 2.75rem);
+  width: max-content;
+  animation: fywClientsMarquee 32s linear infinite;
+}
+
+.fyw-clients__track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes fywClientsMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fyw-clients__track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    row-gap: 1.25rem;
+  }
+}
+
+.fyw-clients__link {
+  flex-shrink: 0;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 50%;
+  transition: transform 0.25s var(--fyw-ease-out);
+}
+
+.fyw-clients__link:hover {
+  transform: scale(1.06);
+}
+
+.fyw-clients__link:focus-visible {
+  outline: 2px solid var(--fyw-accent);
+  outline-offset: 4px;
+}
+
+.fyw-clients__circle {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  width: min(84px, 18vw);
+  height: min(84px, 18vw);
+  border-radius: 50%;
+  overflow: hidden;
+  /* No inset — logo fills the disc up to the inner edge of the border */
+  padding: 0;
+  display: grid;
+  grid-template: 1fr / 1fr;
+  align-items: stretch;
+  justify-items: stretch;
+  background: var(--fyw-card);
+  border: 1px solid var(--fyw-border);
+  box-shadow: var(--fyw-shadow-sm);
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Inner square fills the padded disc so the image has a real box for object-fit */
+.fyw-clients__media {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.fyw-clients__link:hover .fyw-clients__circle,
+.fyw-clients__circle:hover {
+  border-color: rgba(8, 145, 178, 0.35);
+  box-shadow: 0 8px 28px rgba(8, 145, 178, 0.12);
+}
+
+.fyw-clients__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* As large as possible inside the circular frame; full logo visible */
+  object-fit: contain;
+  object-position: center center;
+}
+
+.fyw-clients__initial {
+  font-size: clamp(1.1rem, 3.8vw, 1.45rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: var(--fyw-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (max-width: 640px) {
+  .fyw-clients__circle {
+    width: min(72px, 20vw);
+    height: min(72px, 20vw);
+    padding: 0;
+  }
+
+  .fyw-clients__track {
+    animation-duration: 26s;
+  }
+}

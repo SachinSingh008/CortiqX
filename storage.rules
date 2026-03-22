@@ -1,0 +1,28 @@
+rules_version = '2';
+
+// Firebase Storage security rules
+// - client logos and portfolio images are shown on the public site, so they need public read.
+// - only authenticated users (admin) can write.
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Client logos: public read (used on public Clients page), write only when authenticated
+    match /clients/{clientId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    // Portfolio images: public read (used on public Portfolio page), write only when authenticated
+    match /portfolio/{projectId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    // Home featured project covers: public read (home page cards), authenticated write
+    match /featuredProjects/{projectId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    // Profile pictures: only authenticated users can read/write (employee area)
+    match /profile-pictures/{userId}/{allPaths=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}

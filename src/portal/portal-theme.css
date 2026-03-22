@@ -1,0 +1,13 @@
+/**
+ * Maps Cortiq portal / dashboard CSS variables to Flutter Your Way design tokens.
+ * Imported once in main.jsx after index.css.
+ */
+:root {
+  --bg-primary: var(--fyw-surface);
+  --bg-secondary: var(--fyw-card);
+  --text-primary: var(--fyw-text);
+  --text-secondary: var(--fyw-muted);
+  --text-muted: #94a3b8;
+  --accent-primary: var(--fyw-accent);
+  --accent-secondary: var(--fyw-accent-2);
+}

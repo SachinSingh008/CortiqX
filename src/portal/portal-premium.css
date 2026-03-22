@@ -1,0 +1,461 @@
+/**
+ * Premium portal shell + light-theme surfaces for dashboards (FYW tokens).
+ * Loaded after portal-theme.css; overrides legacy dark-mode rgba() from Cortiq.
+ */
+
+/* ----- App canvas ----- */
+.portal-layout {
+  background:
+    radial-gradient(ellipse 110% 90% at 100% -10%, rgba(124, 58, 237, 0.07), transparent 52%),
+    radial-gradient(ellipse 90% 70% at -5% 100%, rgba(8, 145, 178, 0.08), transparent 48%),
+    radial-gradient(ellipse 60% 50% at 50% 100%, rgba(219, 39, 119, 0.04), transparent 45%),
+    linear-gradient(180deg, #f8fafc 0%, #f1f5f9 55%, #eef2f6 100%);
+}
+
+/* ----- Glass sidebar ----- */
+.portal-sidebar {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(22px) saturate(1.35);
+  -webkit-backdrop-filter: blur(22px) saturate(1.35);
+  border-right: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 8px 0 40px rgba(15, 23, 42, 0.045);
+}
+
+.portal-sidebar-open {
+  box-shadow: 12px 0 56px rgba(15, 23, 42, 0.08);
+}
+
+.portal-sidebar-brand {
+  border-bottom-color: var(--fyw-border);
+}
+
+.portal-sidebar-brand-text {
+  font-family: var(--fyw-font);
+  font-size: 1.28rem;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+
+.portal-role-badge.admin {
+  background: linear-gradient(135deg, rgba(8, 145, 178, 0.14), rgba(124, 58, 237, 0.1));
+  color: var(--fyw-accent);
+  border: 1px solid rgba(8, 145, 178, 0.22);
+}
+
+.portal-role-badge.employee {
+  background: rgba(8, 145, 178, 0.1);
+  color: var(--fyw-accent);
+  border: 1px solid rgba(8, 145, 178, 0.2);
+}
+
+.portal-role-badge.business-associate {
+  background: rgba(245, 158, 11, 0.12);
+  color: #b45309;
+  border: 1px solid rgba(245, 158, 11, 0.28);
+}
+
+.portal-sidebar-close:hover,
+.portal-sidebar-expand:hover {
+  background: var(--fyw-accent-soft);
+  color: var(--fyw-text);
+}
+
+.portal-sidebar-item:hover {
+  color: var(--fyw-text);
+  background: var(--fyw-accent-soft);
+}
+
+.portal-sidebar-item.active {
+  color: var(--fyw-accent);
+  background: linear-gradient(135deg, rgba(8, 145, 178, 0.14), rgba(124, 58, 237, 0.09));
+  border: 1px solid rgba(8, 145, 178, 0.22);
+  box-shadow: 0 4px 18px rgba(8, 145, 178, 0.1);
+}
+
+.portal-sidebar-item.active .portal-sidebar-icon {
+  color: var(--fyw-accent);
+}
+
+.portal-sidebar-divider {
+  background: var(--fyw-border);
+}
+
+.portal-sidebar-count {
+  background: var(--fyw-elevated);
+  color: var(--fyw-muted);
+}
+
+.portal-sidebar-item.active .portal-sidebar-count {
+  background: rgba(8, 145, 178, 0.15);
+  color: var(--fyw-accent);
+}
+
+.portal-sidebar-overlay {
+  background: rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* ----- Sticky header band ----- */
+.portal-header {
+  padding: 1.65rem 2.25rem 1.4rem;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.portal-header-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+  background: var(--fyw-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.portal-header-subtitle {
+  color: var(--fyw-muted);
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.portal-content {
+  padding: 2rem 2.25rem 3rem;
+}
+
+/* ----- Elevated cards (dashboard + profile + user mgmt) ----- */
+.portal-layout .overview-block,
+.portal-layout .overview-stat-card,
+.portal-layout .stat-card,
+.portal-layout .dashboard-content,
+.portal-layout .welcome-card,
+.portal-layout .search-bar,
+.portal-layout .um-create-card,
+.portal-layout .um-users-block,
+.portal-layout .cp-card,
+.portal-layout .profile-card,
+.portal-layout .ba-stat-card,
+.portal-layout .ba-welcome-card,
+.portal-layout .ba-table-wrap,
+.portal-layout .admin-portfolio-card,
+.portal-layout .admin-clients-card,
+.portal-layout .admin-settings-card,
+.portal-layout .aoc-card,
+.portal-layout .admin-portfolio-modal-inner,
+.portal-layout .admin-clients-modal-inner {
+  background: var(--fyw-card) !important;
+  border: 1px solid var(--fyw-border) !important;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 12px 36px rgba(15, 23, 42, 0.06);
+  border-radius: 16px !important;
+}
+
+.portal-layout .overview-block,
+.portal-layout .dashboard-content {
+  border-radius: 20px !important;
+}
+
+.portal-layout .overview-stat-card,
+.portal-layout .stat-card {
+  transition:
+    transform 0.28s var(--fyw-ease-out),
+    box-shadow 0.28s var(--fyw-ease-out),
+    border-color 0.28s var(--fyw-ease-out);
+}
+
+.portal-layout .overview-stat-card:hover,
+.portal-layout .stat-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(8, 145, 178, 0.28) !important;
+  box-shadow:
+    0 4px 12px rgba(15, 23, 42, 0.06),
+    0 20px 48px rgba(8, 145, 178, 0.12);
+}
+
+.portal-layout .overview-block-title {
+  color: var(--fyw-muted);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+}
+
+.portal-layout .dashboard-title-section h1 {
+  font-size: 2rem;
+  letter-spacing: -0.04em;
+  font-weight: 800;
+}
+
+/* ----- Action buttons (admin toolbar) ----- */
+.portal-layout .logout-btn {
+  border-radius: 10px;
+  font-weight: 600;
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.22) !important;
+  color: #dc2626;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.portal-layout .logout-btn:hover {
+  background: rgba(239, 68, 68, 0.11);
+  border-color: rgba(239, 68, 68, 0.35) !important;
+}
+
+.portal-layout .change-password-btn-header,
+.portal-layout .user-management-btn,
+.portal-layout .profile-btn {
+  border-radius: 10px;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.portal-layout .change-password-btn-header {
+  background: linear-gradient(135deg, rgba(8, 145, 178, 0.12), rgba(124, 58, 237, 0.08)) !important;
+  border: 1px solid rgba(8, 145, 178, 0.25) !important;
+  color: var(--fyw-accent) !important;
+}
+
+.portal-layout .change-password-btn-header:hover {
+  background: linear-gradient(135deg, rgba(8, 145, 178, 0.18), rgba(124, 58, 237, 0.12)) !important;
+}
+
+.portal-layout .user-management-btn,
+.portal-layout .profile-btn {
+  background: rgba(124, 58, 237, 0.08) !important;
+  border: 1px solid rgba(124, 58, 237, 0.22) !important;
+  color: var(--fyw-accent-2) !important;
+}
+
+.portal-layout .user-management-btn:hover,
+.portal-layout .profile-btn:hover {
+  background: rgba(124, 58, 237, 0.14) !important;
+}
+
+/* ----- Tabs & search ----- */
+.portal-layout .dashboard-tabs {
+  border-bottom-color: var(--fyw-border);
+  gap: 0.35rem;
+  padding-bottom: 2px;
+}
+
+.portal-layout .tab {
+  border-radius: 10px 10px 0 0;
+  padding: 0.85rem 1.15rem;
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.portal-layout .tab:hover {
+  color: var(--fyw-text);
+  background: var(--fyw-accent-soft);
+}
+
+.portal-layout .tab.active {
+  color: var(--fyw-accent);
+  border-bottom-color: var(--fyw-accent);
+  background: linear-gradient(180deg, rgba(8, 145, 178, 0.08), transparent);
+}
+
+.portal-layout .search-bar {
+  border-radius: 12px !important;
+}
+
+.portal-layout .search-bar input {
+  color: var(--fyw-text);
+}
+
+/* ----- Data tables ----- */
+.portal-layout thead {
+  background: var(--fyw-elevated) !important;
+}
+
+.portal-layout th {
+  color: var(--fyw-muted);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+}
+
+.portal-layout td {
+  border-top-color: var(--fyw-border) !important;
+  color: var(--fyw-text);
+}
+
+.portal-layout .ba-client-table th {
+  background: var(--fyw-elevated);
+  color: var(--fyw-muted);
+  border-bottom: 1px solid var(--fyw-border);
+}
+
+.portal-layout .ba-client-table tbody tr:hover {
+  background: rgba(8, 145, 178, 0.04);
+}
+
+/* ----- Employee welcome ----- */
+.portal-layout .welcome-card {
+  padding: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+.portal-layout .welcome-icon {
+  box-shadow:
+    0 12px 40px rgba(8, 145, 178, 0.35),
+    0 4px 12px rgba(124, 58, 237, 0.2);
+  border: 3px solid rgba(255, 255, 255, 0.95);
+}
+
+.portal-layout .welcome-card h2 {
+  letter-spacing: -0.03em;
+  font-weight: 800;
+}
+
+.portal-layout .welcome-card p {
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.75;
+}
+
+/* ----- Role badges (inline) ----- */
+.portal-layout .role-badge.admin {
+  background: linear-gradient(135deg, rgba(8, 145, 178, 0.12), rgba(124, 58, 237, 0.08));
+  color: var(--fyw-accent);
+  border: 1px solid rgba(8, 145, 178, 0.22);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+}
+
+.portal-layout .role-badge.employee {
+  background: var(--fyw-accent-soft);
+  color: var(--fyw-accent);
+  border: 1px solid rgba(8, 145, 178, 0.2);
+  border-radius: 999px;
+}
+
+/* ----- User management / change password chrome ----- */
+.portal-layout .um-close-btn:hover,
+.portal-layout .cp-close-btn:hover {
+  background: var(--fyw-accent-soft);
+  color: var(--fyw-text);
+}
+
+.portal-layout .um-count {
+  background: var(--fyw-elevated);
+  color: var(--fyw-muted);
+  border: 1px solid var(--fyw-border);
+  border-radius: 8px;
+}
+
+/* ----- Primary CTAs inside admin forms ----- */
+.portal-layout .admin-portfolio-add,
+.portal-layout .admin-clients-add,
+.portal-layout .admin-settings-save {
+  border-radius: 10px !important;
+  box-shadow: 0 4px 14px rgba(8, 145, 178, 0.25);
+  background: linear-gradient(135deg, var(--fyw-accent), #0e7490) !important;
+  color: #fff !important;
+}
+
+.portal-layout .admin-portfolio-add:hover,
+.portal-layout .admin-clients-add:hover,
+.portal-layout .admin-settings-save:hover:not(:disabled) {
+  box-shadow: 0 6px 20px rgba(8, 145, 178, 0.35);
+  filter: brightness(1.03);
+}
+
+.portal-layout .admin-portfolio-form input,
+.portal-layout .admin-portfolio-form select,
+.portal-layout .admin-portfolio-form textarea,
+.portal-layout .admin-clients-form input,
+.portal-layout .admin-settings-row input,
+.portal-layout .admin-settings-row select,
+.portal-layout .admin-settings-textarea {
+  background: var(--fyw-surface) !important;
+  border: 1px solid var(--fyw-border) !important;
+  border-radius: 10px !important;
+  color: var(--fyw-text) !important;
+}
+
+.portal-layout .admin-portfolio-form input:focus,
+.portal-layout .admin-clients-form input:focus,
+.portal-layout .admin-settings-row input:focus {
+  outline: none;
+  border-color: var(--fyw-accent) !important;
+  box-shadow: 0 0 0 3px var(--fyw-accent-soft);
+}
+
+.portal-layout .admin-portfolio-modal-header,
+.portal-layout .admin-clients-modal-header,
+.portal-layout .admin-portfolio-modal-inner,
+.portal-layout .admin-clients-modal-inner {
+  border-color: var(--fyw-border) !important;
+}
+
+.portal-layout .admin-portfolio-card-actions button,
+.portal-layout .admin-clients-card-actions button {
+  border-radius: 8px !important;
+  border-color: var(--fyw-border) !important;
+}
+
+.portal-layout .admin-portfolio-card-actions button:hover,
+.portal-layout .admin-clients-card-actions button:hover {
+  background: var(--fyw-accent-soft) !important;
+  color: var(--fyw-text) !important;
+}
+
+/* ----- BA stat strip ----- */
+.portal-layout .ba-stat-card:hover {
+  border-color: rgba(8, 145, 178, 0.22) !important;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+}
+
+.portal-layout .ba-stat-card.ba-stat-highlight {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(8, 145, 178, 0.06)) !important;
+  border-color: rgba(34, 197, 94, 0.28) !important;
+}
+
+/* ----- Auth loading splash ----- */
+.portal-splash-loading {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  background:
+    radial-gradient(ellipse 100% 80% at 50% -20%, rgba(124, 58, 237, 0.1), transparent 50%),
+    var(--fyw-surface);
+  color: var(--fyw-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.portal-splash-loading__spinner {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 3px solid var(--fyw-border);
+  border-top-color: var(--fyw-accent);
+  animation: portal-spin 0.72s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes portal-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 900px) {
+  .portal-content {
+    padding: 1.25rem 1.15rem 2rem;
+  }
+
+  .portal-header {
+    padding: 1.25rem 1.15rem 1.1rem;
+  }
+}

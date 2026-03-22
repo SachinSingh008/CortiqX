@@ -1,0 +1,132 @@
+.employee-dashboard {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding: 2rem;
+  padding-top: 100px;
+}
+
+.employee-dashboard.employee-dashboard-portal {
+  padding: 0;
+  padding-top: 0;
+  min-height: auto;
+}
+
+.employee-dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.employee-dashboard-title-section h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.employee-dashboard-title-section p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.role-badge.admin {
+  background: rgba(0, 255, 136, 0.1);
+  color: var(--accent-primary);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+.role-badge.employee {
+  background: rgba(0, 212, 255, 0.1);
+  color: var(--accent-secondary);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  border: none;
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  color: var(--accent-secondary);
+}
+
+.profile-btn:hover {
+  background: rgba(0, 212, 255, 0.2);
+  border-color: var(--accent-secondary);
+}
+
+.employee-welcome-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.welcome-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 4rem;
+  text-align: center;
+}
+
+.welcome-icon {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  border-radius: 50%;
+  font-size: 3rem;
+  color: var(--bg-primary);
+}
+
+.welcome-card h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.welcome-card p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+@media (max-width: 768px) {
+  .employee-dashboard {
+    padding: 1rem;
+    padding-top: 100px;
+  }
+
+  .welcome-card {
+    padding: 2rem;
+  }
+}
+
+
+
+

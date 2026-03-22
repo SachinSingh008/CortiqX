@@ -1,0 +1,68 @@
+.admin-portfolio { padding: 1rem 0; }
+.admin-portfolio-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.admin-portfolio-header h2 { margin: 0; font-size: 1.25rem; color: var(--text-primary); }
+.admin-portfolio-add { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; background: var(--accent-primary); color: var(--bg-primary); border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+.admin-portfolio-add:hover { opacity: 0.9; }
+.admin-portfolio-error { padding: 0.75rem; background: rgba(255,100,100,0.15); border: 1px solid rgba(255,100,100,0.3); border-radius: 6px; color: #ff6b6b; margin-bottom: 1rem; font-size: 0.9rem; }
+.admin-portfolio-order-hint { font-size: 0.8rem; color: var(--text-muted); margin: 0 0 0.75rem 0; }
+.admin-portfolio-list { display: flex; flex-direction: column; gap: 0.75rem; }
+.admin-portfolio-card { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; }
+.admin-portfolio-card-drag-handle { display: flex; align-items: center; justify-content: center; width: 32px; height: 36px; color: var(--text-muted); cursor: grab; border-radius: 6px; flex-shrink: 0; }
+.admin-portfolio-card-drag-handle:active { cursor: grabbing; }
+.admin-portfolio-card-drag-handle:hover { color: var(--accent-primary); background: rgba(255,255,255,0.05); }
+.admin-portfolio-card.admin-portfolio-card-drag-over { border-color: var(--accent-primary); box-shadow: 0 0 0 2px rgba(0,255,136,0.25); }
+.admin-portfolio-card-order { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; flex-shrink: 0; }
+.admin-portfolio-card-position { display: inline-flex; align-items: center; justify-content: center; min-width: 26px; height: 26px; padding: 0 6px; background: rgba(0,255,136,0.15); color: var(--accent-primary); border-radius: 6px; font-size: 0.8rem; font-weight: 700; }
+.admin-portfolio-card-order-btns { display: flex; gap: 2px; }
+.admin-portfolio-card-move { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: var(--text-secondary); border-radius: 6px; cursor: pointer; font-size: 0.9rem; padding: 0; }
+.admin-portfolio-card-move:hover:not(:disabled) { background: rgba(0,255,136,0.15); color: var(--accent-primary); border-color: rgba(0,255,136,0.4); }
+.admin-portfolio-card-move:disabled { opacity: 0.4; cursor: not-allowed; }
+.admin-portfolio-card-info { flex: 1; min-width: 0; }
+.admin-portfolio-card-info h3 { margin: 0 0 0.25rem 0; font-size: 1rem; color: var(--text-primary); }
+.admin-portfolio-card-info p { margin: 0; font-size: 0.85rem; color: var(--text-secondary); }
+.admin-portfolio-card-domain { font-size: 0.75rem; color: var(--accent-primary); font-weight: 600; }
+.admin-portfolio-card-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+.admin-portfolio-card-actions button { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.5rem 0.75rem; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: var(--text-secondary); border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+.admin-portfolio-card-actions button:hover { background: rgba(255,255,255,0.06); color: var(--text-primary); }
+.admin-portfolio-card-actions button.danger:hover { background: rgba(255,100,100,0.15); color: #ff6b6b; border-color: rgba(255,100,100,0.3); }
+.admin-portfolio-empty { color: var(--text-secondary); font-size: 0.95rem; padding: 2rem; text-align: center; }
+.admin-portfolio-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1100; padding: 1rem; overflow-y: auto; }
+.admin-portfolio-modal-inner { background: var(--bg-secondary); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; max-width: 560px; width: 100%; max-height: 90vh; overflow-y: auto; }
+.admin-portfolio-modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.admin-portfolio-modal-header h3 { margin: 0; font-size: 1.1rem; color: var(--text-primary); }
+.admin-portfolio-modal-header .close { background: none; border: none; color: var(--text-secondary); font-size: 1.25rem; cursor: pointer; padding: 0.25rem; }
+.admin-portfolio-form { padding: 1.25rem; }
+.admin-portfolio-form label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.35rem; margin-top: 0.75rem; }
+.admin-portfolio-form label:first-of-type { margin-top: 0; }
+.admin-portfolio-form .admin-form-hint { margin: 0 0 0.5rem 0; font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
+.admin-portfolio-form .admin-file-wrap { margin-bottom: 0.5rem; }
+.admin-portfolio-form .admin-file-wrap input[type="file"] { position: absolute; width: 0.1px; height: 0.1px; opacity: 0; overflow: hidden; z-index: -1; }
+.admin-portfolio-form .admin-file-label { display: inline-block; padding: 0.6rem 1rem; background: rgba(0,255,136,0.1); border: 1px dashed rgba(0,255,136,0.4); border-radius: 8px; color: var(--accent-primary); font-size: 0.9rem; cursor: pointer; }
+.admin-portfolio-form .admin-file-label:hover { background: rgba(0,255,136,0.15); border-color: var(--accent-primary); }
+.admin-portfolio-form input, .admin-portfolio-form select, .admin-portfolio-form textarea { width: 100%; padding: 0.6rem 0.75rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: var(--text-primary); font-size: 0.9rem; font-family: inherit; }
+.admin-portfolio-form input[type="file"] { padding: 0.4rem 0; }
+.admin-portfolio-form small { display: block; margin-top: 0.25rem; font-size: 0.8rem; color: var(--text-muted); }
+.admin-portfolio-form small a { color: var(--accent-primary); }
+
+/* Existing gallery: thumbnails + delete */
+.admin-portfolio-gallery-existing { margin-top: 0.5rem; margin-bottom: 0.5rem; }
+.admin-portfolio-gallery-existing-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; font-size: 0.8rem; color: var(--text-muted); }
+.admin-portfolio-gallery-remove-all { background: none; border: none; color: #ff6b6b; font-size: 0.8rem; cursor: pointer; padding: 0.2rem 0.5rem; border-radius: 4px; }
+.admin-portfolio-gallery-remove-all:hover { background: rgba(255,100,100,0.15); }
+.admin-portfolio-gallery-thumbs { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.admin-portfolio-gallery-thumb { position: relative; width: 80px; height: 80px; border-radius: 8px; overflow: hidden; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); cursor: grab; }
+.admin-portfolio-gallery-thumb:active { cursor: grabbing; }
+.admin-portfolio-gallery-thumb.admin-portfolio-gallery-thumb-drag-over { border-color: var(--accent-primary); box-shadow: 0 0 0 2px rgba(0,255,136,0.3); }
+.admin-portfolio-gallery-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.admin-portfolio-gallery-thumb-order { position: absolute; top: 2px; left: 2px; min-width: 18px; height: 18px; padding: 0 4px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); color: #fff; border-radius: 4px; font-size: 0.7rem; font-weight: 600; z-index: 2; }
+.admin-portfolio-gallery-thumb-actions { position: absolute; bottom: 2px; left: 2px; right: 2px; display: flex; justify-content: center; gap: 2px; z-index: 2; }
+.admin-portfolio-gallery-thumb-move { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); color: var(--accent-primary); border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; padding: 0; }
+.admin-portfolio-gallery-thumb-move:hover:not(:disabled) { background: rgba(0,255,136,0.25); color: #fff; }
+.admin-portfolio-gallery-thumb-move:disabled { opacity: 0.4; cursor: not-allowed; }
+.admin-portfolio-gallery-thumb-remove { position: absolute; top: 2px; right: 2px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); color: #ff6b6b; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem; padding: 0; z-index: 2; }
+.admin-portfolio-gallery-thumb-remove:hover { background: rgba(255,100,100,0.9); color: #fff; }
+
+.admin-portfolio-form-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+.admin-portfolio-form-actions button[type="submit"] { padding: 0.65rem 1.25rem; background: var(--accent-primary); color: var(--bg-primary); border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+.admin-portfolio-form-actions button[type="button"] { padding: 0.65rem 1.25rem; background: transparent; color: var(--text-secondary); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; cursor: pointer; }
+.admin-portfolio-form-actions button:disabled { opacity: 0.6; cursor: not-allowed; }
