@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion'
 import BrandLogo from './BrandLogo'
 import ConsultationLink from './ConsultationLink.jsx'
+import Magnetic from './Magnetic.jsx'
 
 const navItems = [
   {
@@ -88,59 +89,74 @@ export default function Header() {
   return (
     <header className={`fyw-header ${scrolled ? 'fyw-header--scrolled' : ''}`}>
       <div className="fyw-header__inner">
-        <BrandLogo />
+        <Magnetic>
+          <BrandLogo />
+        </Magnetic>
 
         <nav className="fyw-nav fyw-nav--desktop" aria-label="Primary">
           {navItems.map((item) => (
-            <div
-              key={item.label}
-              className="fyw-nav__item"
-              onMouseEnter={() => {
-                clearClose()
-                setOpen(item.label)
-              }}
-              onMouseLeave={scheduleClose}
-            >
-              <button
-                type="button"
-                className={`fyw-nav__trigger ${open === item.label ? 'is-open' : ''}`}
-                aria-expanded={open === item.label}
+            <Magnetic key={item.label}>
+              <div
+                className="fyw-nav__item"
+                onMouseEnter={() => {
+                  clearClose()
+                  setOpen(item.label)
+                }}
+                onMouseLeave={scheduleClose}
               >
-                {item.label}
-                <svg width="10" height="6" viewBox="0 0 10 6" aria-hidden>
-                  <path
-                    d="M1 1.5L5 4.5L9 1.5"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    fill="none"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </button>
-            </div>
+                <button
+                  type="button"
+                  className={`fyw-nav__trigger ${open === item.label ? 'is-open' : ''}`}
+                  aria-expanded={open === item.label}
+                >
+                  {item.label}
+                  <svg width="10" height="6" viewBox="0 0 10 6" aria-hidden>
+                    <path
+                      d="M1 1.5L5 4.5L9 1.5"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      fill="none"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </Magnetic>
           ))}
-          <Link to="/#projects" className="fyw-nav__link">
-            Projects
-          </Link>
-          <Link to="/#clients" className="fyw-nav__link">
-            Clients
-          </Link>
-          <Link to="/pricing" className="fyw-nav__link">
-            Pricing
-          </Link>
-          <Link to="/#contact" className="fyw-nav__link">
-            Contact
-          </Link>
+          <Magnetic>
+            <Link to="/#projects" className="fyw-nav__link">
+              Projects
+            </Link>
+          </Magnetic>
+          <Magnetic>
+            <Link to="/#clients" className="fyw-nav__link">
+              Clients
+            </Link>
+          </Magnetic>
+          <Magnetic>
+            <Link to="/pricing" className="fyw-nav__link">
+              Pricing
+            </Link>
+          </Magnetic>
+          <Magnetic>
+            <Link to="/#contact" className="fyw-nav__link">
+              Contact
+            </Link>
+          </Magnetic>
         </nav>
 
         <div className="fyw-header__actions">
           <div className="fyw-header__auth">
-            <ConsultationLink className="fyw-btn fyw-btn--nav fyw-btn--consult">
-              Book Free Consultation
-            </ConsultationLink>
-            <Link to="/login" className="fyw-btn fyw-btn--ghost fyw-btn--nav">
-              Login
-            </Link>
+            <Magnetic>
+              <ConsultationLink className="fyw-btn fyw-btn--nav fyw-btn--consult">
+                Book Free Consultation
+              </ConsultationLink>
+            </Magnetic>
+            <Magnetic>
+              <Link to="/login" className="fyw-btn fyw-btn--ghost fyw-btn--nav">
+                Login
+              </Link>
+            </Magnetic>
           </div>
           <button
             type="button"
