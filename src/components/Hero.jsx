@@ -216,8 +216,8 @@ export default function Hero() {
           WebkitMask: 'url(#mag-mask)',
           backgroundColor: '#ffffff', // Fulfills 'below the white bg' by putting them on a white sheet
           display: 'grid',
-          gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
-          gridTemplateRows: isMobile ? 'repeat(3, 1fr)' : 'repeat(2, 1fr)',
+          gridTemplateColumns: isMobile ? 'repeat(2, minmax(0, 1fr))' : 'repeat(3, minmax(0, 1fr))',
+          gridTemplateRows: isMobile ? 'repeat(3, minmax(0, 1fr))' : 'repeat(2, minmax(0, 1fr))',
           gap: '8px',
           padding: '8px'
         }}
@@ -254,9 +254,9 @@ export default function Hero() {
             filter: 'drop-shadow(0 15px 15px rgba(0,0,0,0.15))'
           }}
         >
-          <img 
-            src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Animals/Rabbit.png" 
-            alt="Hidden Rabbit" 
+          <img
+            src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Animals/Rabbit.png"
+            alt="Hidden Rabbit"
             style={{ width: '100%', height: '100%', objectFit: 'contain' }}
           />
         </motion.div>
@@ -386,14 +386,14 @@ export default function Hero() {
           }} />
         </div>
 
-        <div style={{ 
+        <div style={{
           width: isMobile ? '48px' : '64px',
           height: isMobile ? '48px' : '64px',
           filter: 'drop-shadow(0 15px 15px rgba(0,0,0,0.15))'
         }}>
-          <img 
-            src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Animals/Rabbit.png" 
-            alt="Intro Rabbit" 
+          <img
+            src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Animals/Rabbit.png"
+            alt="Intro Rabbit"
             style={{ width: '100%', height: '100%', objectFit: 'contain' }}
           />
         </div>
