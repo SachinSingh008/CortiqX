@@ -7,7 +7,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { db, storage } from '../firebase/config'
 import html2canvas from 'html2canvas'
 import { jsPDF } from 'jspdf'
-import offerLetterTemplateBg from '../Assets/Offer letter_template.svg?url'
+import offerLetterTemplateBg from '../assets/Offer letter_template.svg?url'
 import './EmployeeProfile.css'
 
 const INTERN_ROLES = ['Developer', 'Business Associate']
