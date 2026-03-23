@@ -122,8 +122,9 @@ function ProjectCardVisual({ project, index }) {
           src={project.image}
           alt=""
           className="fyw-stack-card__photo"
-          loading="lazy"
+          loading="eager"
           decoding="async"
+          {...(index === 0 ? { fetchPriority: 'high' } : {})}
         />
       </div>
     )
@@ -308,6 +309,15 @@ function usePublishedFeaturedProjects() {
           .map((d) => normalizeFeaturedProject(d.data(), d.id))
           .filter((p) => p.published)
           .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+          
+        // Precache images ASAP
+        list.forEach((p) => {
+          if (p.image) {
+            const img = new Image()
+            img.src = p.image
+          }
+        })
+        
         setProjects(list)
         setReady(true)
       },
