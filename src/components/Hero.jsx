@@ -92,7 +92,7 @@ export default function Hero() {
   }, [])
 
   const handleMouseMove = (e) => {
-    if (!containerRef.current) return
+    if (!containerRef.current || isMobile) return
     const rect = containerRef.current.getBoundingClientRect()
     const relX = e.clientX - rect.left
     const relY = e.clientY - rect.top
@@ -209,100 +209,104 @@ export default function Hero() {
       </div>
 
       {/* LAYER 2: The secret background grid of GIFs, masked precisely to only exist inside the glass */}
-      <div
-        style={{
-          position: 'absolute', inset: 0, zIndex: 1,
-          mask: 'url(#mag-mask)',
-          WebkitMask: 'url(#mag-mask)',
-          backgroundColor: '#ffffff', // Fulfills 'below the white bg' by putting them on a white sheet
-          display: 'grid',
-          gridTemplateColumns: isMobile ? 'repeat(2, minmax(0, 1fr))' : 'repeat(3, minmax(0, 1fr))',
-          gridTemplateRows: isMobile ? 'repeat(3, minmax(0, 1fr))' : 'repeat(2, minmax(0, 1fr))',
-          gap: '8px',
-          padding: '8px'
-        }}
-      >
-        {gifs.map((src, index) => (
-          <img
-            key={`gif-slot-${index}`}
-            src={src}
-            alt="coding"
-            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
-          />
-        ))}
-
-        {/* Hidden Hopping Rabbit - "The Detective's Catch" */}
-        <motion.div
-          animate={{
-            left: `${rabbitPos.x}%`,
-            top: `${rabbitPos.y}%`,
-            scale: [1, 1.4, 1],
-            y: [0, -20, 0] // Hopping physics
-          }}
-          transition={{
-            left: { duration: 0.8, ease: "easeInOut" },
-            top: { duration: 0.8, ease: "easeInOut" },
-            y: { duration: 0.4, repeat: 1, ease: "easeOut" }
-          }}
+      {!isMobile && (
+        <div
           style={{
-            position: 'absolute',
-            width: isMobile ? '64px' : '96px',
-            height: isMobile ? '64px' : '96px',
-            pointerEvents: 'none',
-            zIndex: 5,
-            userSelect: 'none',
-            filter: 'drop-shadow(0 15px 15px rgba(0,0,0,0.15))'
+            position: 'absolute', inset: 0, zIndex: 1,
+            mask: 'url(#mag-mask)',
+            WebkitMask: 'url(#mag-mask)',
+            backgroundColor: '#ffffff', // Fulfills 'below the white bg' by putting them on a white sheet
+            display: 'grid',
+            gridTemplateColumns: isMobile ? 'repeat(2, minmax(0, 1fr))' : 'repeat(3, minmax(0, 1fr))',
+            gridTemplateRows: isMobile ? 'repeat(3, minmax(0, 1fr))' : 'repeat(2, minmax(0, 1fr))',
+            gap: '8px',
+            padding: '8px'
           }}
         >
-          <img
-            src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Animals/Rabbit.png"
-            alt="Hidden Rabbit"
-            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-          />
-        </motion.div>
-      </div>
+          {gifs.map((src, index) => (
+            <img
+              key={`gif-slot-${index}`}
+              src={src}
+              alt="coding"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
+            />
+          ))}
+
+          {/* Hidden Hopping Rabbit - "The Detective's Catch" */}
+          <motion.div
+            animate={{
+              left: `${rabbitPos.x}%`,
+              top: `${rabbitPos.y}%`,
+              scale: [1, 1.4, 1],
+              y: [0, -20, 0] // Hopping physics
+            }}
+            transition={{
+              left: { duration: 0.8, ease: "easeInOut" },
+              top: { duration: 0.8, ease: "easeInOut" },
+              y: { duration: 0.4, repeat: 1, ease: "easeOut" }
+            }}
+            style={{
+              position: 'absolute',
+              width: isMobile ? '64px' : '96px',
+              height: isMobile ? '64px' : '96px',
+              pointerEvents: 'none',
+              zIndex: 5,
+              userSelect: 'none',
+              filter: 'drop-shadow(0 15px 15px rgba(0,0,0,0.15))'
+            }}
+          >
+            <img
+              src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Animals/Rabbit.png"
+              alt="Hidden Rabbit"
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            />
+          </motion.div>
+        </div>
+      )}
 
       {/* LAYER 3: The Physical Photorealistic Magnifying Glass Structural Object */}
-      <svg
-        style={{
-          position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 2,
-          filter: 'drop-shadow(-15px 25px 20px rgba(0,0,0,0.5)) drop-shadow(-5px 10px 10px rgba(0,0,0,0.3))'
-        }}
-      >
-        <motion.g
-          style={{ x, y }}
-          initial={{ scale: 0 }}
-          animate={{ scale: isHovered ? (isMobile ? 0.65 : 1) : 0 }}
-          transition={{ type: "spring", stiffness: 100, damping: 20 }}
+      {!isMobile && (
+        <svg
+          style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 2,
+            filter: 'drop-shadow(-15px 25px 20px rgba(0,0,0,0.5)) drop-shadow(-5px 10px 10px rgba(0,0,0,0.3))'
+          }}
         >
-          <g transform="rotate(-45)">
-            {/* Handle Base (Polished Brass connector sleeve) */}
-            <rect x="-12" y="115" width="24" height="40" fill="url(#sherlock-brass-dark)" />
+          <motion.g
+            style={{ x, y }}
+            initial={{ scale: 0 }}
+            animate={{ scale: isHovered ? (isMobile ? 0.65 : 1) : 0 }}
+            transition={{ type: "spring", stiffness: 100, damping: 20 }}
+          >
+            <g transform="rotate(-45)">
+              {/* Handle Base (Polished Brass connector sleeve) */}
+              <rect x="-12" y="115" width="24" height="40" fill="url(#sherlock-brass-dark)" />
 
-            {/* Handle Body (Dark Mahogany Wood, highly refined/slender) */}
-            <rect x="-10" y="155" width="20" height="140" rx="6" fill="url(#mahogany-wood)" />
-            <rect x="-12" y="280" width="24" height="15" rx="4" fill="url(#sherlock-brass)" /> {/* Classic Brass Pommel */}
+              {/* Handle Body (Dark Mahogany Wood, highly refined/slender) */}
+              <rect x="-10" y="155" width="20" height="140" rx="6" fill="url(#mahogany-wood)" />
+              <rect x="-12" y="280" width="24" height="15" rx="4" fill="url(#sherlock-brass)" /> {/* Classic Brass Pommel */}
 
-            {/* Handle Shadows & Wood Highlights */}
-            <rect x="-8" y="155" width="3" height="140" rx="1.5" fill="rgba(255,255,255,0.15)" />
-            <rect x="4" y="155" width="5" height="140" rx="2.5" fill="rgba(0,0,0,0.5)" />
+              {/* Handle Shadows & Wood Highlights */}
+              <rect x="-8" y="155" width="3" height="140" rx="1.5" fill="rgba(255,255,255,0.15)" />
+              <rect x="4" y="155" width="5" height="140" rx="2.5" fill="rgba(0,0,0,0.5)" />
 
-            {/* The Refined Framework Rim (Polished Victorian Brass) */}
-            <circle cx="0" cy="0" r="126" fill="none" stroke="url(#sherlock-brass)" strokeWidth="16" />
-            {/* Shadow bounding outer wall */}
-            <circle cx="0" cy="0" r="134" fill="none" stroke="url(#sherlock-brass-dark)" strokeWidth="2" />
-            {/* Deep inner bevel meeting the glass */}
-            <circle cx="0" cy="0" r="118" fill="none" stroke="url(#sherlock-brass-dark)" strokeWidth="3" />
+              {/* The Refined Framework Rim (Polished Victorian Brass) */}
+              <circle cx="0" cy="0" r="126" fill="none" stroke="url(#sherlock-brass)" strokeWidth="16" />
+              {/* Shadow bounding outer wall */}
+              <circle cx="0" cy="0" r="134" fill="none" stroke="url(#sherlock-brass-dark)" strokeWidth="2" />
+              {/* Deep inner bevel meeting the glass */}
+              <circle cx="0" cy="0" r="118" fill="none" stroke="url(#sherlock-brass-dark)" strokeWidth="3" />
 
-            {/* Specular Lens Glare / Pristine Refractive Glass Reflection */}
-            <path d="M -85 -85 A 120 120 0 0 1 85 -85" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="10" strokeLinecap="round" filter="blur(1px)" />
-            <path d="M -75 -100 A 130 130 0 0 1 60 -115" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="4" strokeLinecap="round" />
+              {/* Specular Lens Glare / Pristine Refractive Glass Reflection */}
+              <path d="M -85 -85 A 120 120 0 0 1 85 -85" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="10" strokeLinecap="round" filter="blur(1px)" />
+              <path d="M -75 -100 A 130 130 0 0 1 60 -115" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="4" strokeLinecap="round" />
 
-            {/* Pristine Clear Glass + Dynamic Internal Shadow */}
-            <circle cx="0" cy="0" r="118" fill="rgba(255, 255, 255, 0.02)" filter="url(#lens-inner-shadow)" />
-          </g>
-        </motion.g>
-      </svg>
+              {/* Pristine Clear Glass + Dynamic Internal Shadow */}
+              <circle cx="0" cy="0" r="118" fill="rgba(255, 255, 255, 0.02)" filter="url(#lens-inner-shadow)" />
+            </g>
+          </motion.g>
+        </svg>
+      )}
 
       {/* LAYER 4: The Hero foreground content text and buttons (Top) - Always visible */}
       <div className="fyw-container fyw-hero__layout" style={{ position: 'relative', zIndex: 10 }}>
@@ -336,68 +340,70 @@ export default function Hero() {
       </div>
 
       {/* The Rabbit Game "Hook" - Visible on the main white screen */}
-      <motion.div
-        animate={{
-          y: [0, -10, 0],
-          rotate: [0, -5, 5, 0],
-          opacity: isHookHidden ? 0 : 1
-        }}
-        transition={{
-          y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-          rotate: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-          opacity: { duration: 0.3 }
-        }}
-        style={{
-          position: 'absolute',
-          right: isMobile ? '5%' : '5%',
-          top: isMobile ? '5%' : '5%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          pointerEvents: 'none',
-          zIndex: 11
-        }}
-      >
-        {/* Notification / Speech Bubble */}
-        <div style={{
-          backgroundColor: '#ffffff',
-          color: '#1e293b',
-          padding: '8px 14px',
-          borderRadius: '20px',
-          fontSize: '12px',
-          fontWeight: '700',
-          boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
-          border: '2px solid #f1f5f9',
-          marginBottom: '8px',
-          position: 'relative',
-          whiteSpace: 'nowrap'
-        }}>
-          {RABBIT_QUOTES[quoteIndex]}
-          <div style={{
+      {!isMobile && (
+        <motion.div
+          animate={{
+            y: [0, -10, 0],
+            rotate: [0, -5, 5, 0],
+            opacity: isHookHidden ? 0 : 1
+          }}
+          transition={{
+            y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+            rotate: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+            opacity: { duration: 0.3 }
+          }}
+          style={{
             position: 'absolute',
-            bottom: '-10px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: 0,
-            height: 0,
-            borderLeft: '8px solid transparent',
-            borderRight: '8px solid transparent',
-            borderTop: '10px solid #ffffff'
-          }} />
-        </div>
+            right: isMobile ? '5%' : '5%',
+            top: isMobile ? '5%' : '5%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            pointerEvents: 'none',
+            zIndex: 11
+          }}
+        >
+          {/* Notification / Speech Bubble */}
+          <div style={{
+            backgroundColor: '#ffffff',
+            color: '#1e293b',
+            padding: '8px 14px',
+            borderRadius: '20px',
+            fontSize: '12px',
+            fontWeight: '700',
+            boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
+            border: '2px solid #f1f5f9',
+            marginBottom: '8px',
+            position: 'relative',
+            whiteSpace: 'nowrap'
+          }}>
+            {RABBIT_QUOTES[quoteIndex]}
+            <div style={{
+              position: 'absolute',
+              bottom: '-10px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: 0,
+              height: 0,
+              borderLeft: '8px solid transparent',
+              borderRight: '8px solid transparent',
+              borderTop: '10px solid #ffffff'
+            }} />
+          </div>
 
-        <div style={{
-          width: isMobile ? '48px' : '64px',
-          height: isMobile ? '48px' : '64px',
-          filter: 'drop-shadow(0 15px 15px rgba(0,0,0,0.15))'
-        }}>
-          <img
-            src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Animals/Rabbit.png"
-            alt="Intro Rabbit"
-            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-          />
-        </div>
-      </motion.div>
+          <div style={{
+            width: isMobile ? '48px' : '64px',
+            height: isMobile ? '48px' : '64px',
+            filter: 'drop-shadow(0 15px 15px rgba(0,0,0,0.15))'
+          }}>
+            <img
+              src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Animals/Rabbit.png"
+              alt="Intro Rabbit"
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            />
+          </div>
+        </motion.div>
+      )}
     </section>
   )
 }
