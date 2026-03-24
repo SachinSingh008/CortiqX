@@ -29,7 +29,7 @@ export default function Footer() {
               <Link to="/#projects">Projects</Link>
             </li>
             <li>
-              <Link to="/pricing">Pricing</Link>
+              <Link to="/#pricing">Pricing</Link>
             </li>
             <li>
               <ConsultationLink>Book Free Consultation</ConsultationLink>
@@ -81,11 +81,7 @@ export default function Footer() {
       <div className="fyw-footer__bottom">
         <div className="fyw-container">
           <p>
-            © {new Date().getFullYear()} CortiqX. All rights reserved. Hero layout inspired by{' '}
-            <a href="https://www.flutteryourway.com/" target="_blank" rel="noreferrer">
-              Flutter Your Way
-            </a>
-            .
+            © {new Date().getFullYear()} CortiqX. All rights reserved.
           </p>
         </div>
       </div>

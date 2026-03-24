@@ -6,11 +6,13 @@ import {
   useReducedMotion,
   useScroll,
   useSpring,
+  useTransform,
 } from 'framer-motion'
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { Link } from 'react-router-dom'
 import { db } from '../firebase/config'
 import { DOMAINS, projects as staticProjects } from '../data/portfolioData'
+import './BuiltCarousel.css'
 import {
   normalizePortfolioDoc,
   portfolioHeroImage,
@@ -37,9 +39,9 @@ function liveUrlDisplay(url) {
 const vp = { once: true, amount: 0.15 }
 
 /** macOS-style window: traffic lights + content area (no device/laptop frame) */
-function DesktopWindow({ children, className = '' }) {
+function DesktopWindow({ children, className = '', style = {} }) {
   return (
-    <div className={`fyw-built__window ${className}`.trim()}>
+    <div className={`fyw-built__window ${className}`.trim()} style={style}>
       <div className="fyw-built__window-titlebar" aria-hidden>
         <span className="fyw-built__window-dots">
           <span className="fyw-built__window-dot fyw-built__window-dot--close" />
@@ -80,41 +82,55 @@ function useWebDevelopmentPortfolio() {
   return { projects, ready }
 }
 
-function BuiltScrollScene({ projects }) {
+function BuiltScrollScene({ projects, header }) {
   const trackRef = useRef(null)
   const reduceMotion = useReducedMotion()
   const n = projects.length
   const isNarrow = useMediaQuery('(max-width: 640px)')
-  const isTablet = useMediaQuery('(max-width: 900px)')
+  const isTablet = useMediaQuery('(max-width: 1024px)')
   const [activeIndex, setActiveIndex] = useState(0)
+  const cardWidth = isNarrow ? 320 : isTablet ? 820 : 1200
+  const nSides = Math.max(3, n)
+  const radius = (cardWidth / 2) / Math.tan(Math.PI / nSides)
+
+  const dragX = useSpring(0, { stiffness: 320, damping: 32 })
 
   const { scrollYProgress } = useScroll({
     target: trackRef,
     offset: ['start start', 'end end'],
   })
 
+  // Quicker spring for a solid snapping feel
   const progress = useSpring(scrollYProgress, {
-    stiffness: 48,
-    damping: 28,
-    mass: 0.35,
-    restDelta: 0.0004,
+    stiffness: 60,
+    damping: 32,
+    mass: 0.5,
+    restDelta: 0.0002,
   })
 
-  useMotionValueEvent(progress, 'change', (v) => {
+  const step = 360 / n
+  // Scroll 0 -> 1 moves the carousel by (n-1) steps, landing exactly on each project face
+  const scrollRotation = useTransform(progress, [0, 1], [0, -(n - 1) * step])
+  const dragRotation = useTransform(dragX, (x) => (x / cardWidth) * step)
+
+  const rotation = useTransform(
+    [scrollRotation, dragRotation],
+    ([s, d]) => s + d
+  )
+
+  useMotionValueEvent(rotation, 'change', (v) => {
     if (n <= 0) return
-    const next = Math.min(n - 1, Math.max(0, Math.floor(v * n - 1e-9)))
+    let deg = -v % 360
+    if (deg < 0) deg += 360
+    const next = Math.round(deg / step) % n
     setActiveIndex(next)
   })
 
   const trackVh = useMemo(() => {
-    const raw = Math.max(128, 66 + Math.max(1, n) * 46)
-    if (isNarrow) return Math.max(72, Math.round(raw * 0.36))
-    if (isTablet) return Math.max(100, Math.round(raw * 0.55))
-    return raw
-  }, [n, isNarrow, isTablet])
+    // 100vh per card face for a clear 'one notch = one card' experience
+    return n * 100
+  }, [n])
 
-  const active = projects[activeIndex] ?? projects[0]
-  const href = liveUrlHref(active?.url)
   const domainMeta = DOMAINS[WEB_DEVELOPMENT_DOMAIN]
 
   if (reduceMotion) {
@@ -158,117 +174,159 @@ function BuiltScrollScene({ projects }) {
             )
           })}
         </div>
-        <div className="fyw-container fyw-built__scroll-inner fyw-built__simple-footer">
-          <div className="fyw-built__links">
-            <Link className="fyw-built__cta-link fyw-built__cta-link--primary" to="/#projects">
-              View projects
-            </Link>
-          </div>
-        </div>
       </div>
     )
   }
 
+
   return (
     <div ref={trackRef} className="fyw-built__track" style={{ height: `${trackVh}vh` }}>
       <div className="fyw-built__pin">
-        <div className="fyw-container fyw-built__scroll-inner fyw-built__scroll-layout">
-          <div className="fyw-built__copy-col fyw-built__detail">
-            <motion.p
-              className="fyw-service-card__tag"
-              initial={{ opacity: 0, y: 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={vp}
-              transition={{ duration: 0.4 }}
-            >
-              {domainMeta?.label || 'Web Development'}
-            </motion.p>
+        {/* Sticky Header remains visible within the pin */}
+        <div className="fyw-built__sticky-header-wrap">
+          <div className="fyw-container">{header}</div>
+        </div>
 
-            <AnimatePresence initial={false} mode="wait">
-              <motion.div
-                key={active?.id ?? activeIndex}
-                className="fyw-built__project-block"
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <h3>{active?.title}</h3>
-                <p className="fyw-service-card__desc">
-                  {active?.shortDescription || active?.fullDescription}
-                </p>
-                {active?.technologies?.length ? (
-                  <ul className="fyw-built__tech" aria-label="Technologies">
-                    {active.technologies.slice(0, 8).map((t) => (
-                      <li key={t}>{t}</li>
-                    ))}
-                  </ul>
-                ) : null}
-              </motion.div>
-            </AnimatePresence>
+        <div className="fyw-built__carousel-viewport">
+          <motion.div
+            className="fyw-built__carousel-stage"
+            onPanEnd={(e, info) => {
+              // Discrete Swipe: snap exactly one card to the left or right
+              const threshold = 50
+              const currentX = dragX.get()
+              if (info.offset.x > threshold) {
+                dragX.set(currentX + cardWidth)
+              } else if (info.offset.x < -threshold) {
+                dragX.set(currentX - cardWidth)
+              } else {
+                // Return to previous snap if flick was weak
+                const nearestX = Math.round(currentX / cardWidth) * cardWidth
+                dragX.set(nearestX)
+              }
+            }}
+            onWheel={(e) => {
+              // Discrete Wheel: one notch = one project rotate
+              if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                if (Math.abs(e.deltaX) < 10) return // Ignore tiny drifts
+                const currentX = dragX.get()
+                if (e.deltaX > 0) {
+                  dragX.set(currentX - cardWidth)
+                } else {
+                  dragX.set(currentX + cardWidth)
+                }
+              }
+            }}
+            style={{
+              rotateY: rotation,
+              transformStyle: 'preserve-3d',
+            }}
+          >
+            {projects.map((p, i) => {
+              const src = portfolioHeroImage(p)
+              const angle = i * step
+              const href = liveUrlHref(p.url)
 
-            <div className="fyw-built__dots" role="tablist" aria-label="Projects">
-              {projects.map((p, i) => (
-                <span
+              return (
+                <div
                   key={p.id}
-                  role="presentation"
-                  className={`fyw-built__dot${i === activeIndex ? ' is-active' : ''}`}
-                />
-              ))}
-            </div>
-
-            <div className="fyw-built__links">
-              <Link className="fyw-built__cta-link fyw-built__cta-link--primary" to="/#projects">
-                View projects
-              </Link>
-              {href ? (
-                <a
-                  className="fyw-built__cta-link fyw-built__cta-link--secondary"
-                  href={href}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={`Open live site (${liveUrlDisplay(active?.url) || 'link'})`}
+                  className="fyw-built__carousel-item"
+                  style={{
+                    transform: `rotateY(${angle}deg) translateZ(${radius}px)`,
+                  }}
                 >
-                  Live site
-                </a>
-              ) : null}
-            </div>
-          </div>
+                  <motion.div
+                    className="fyw-built__carousel-card"
+                    animate={{
+                      opacity: Math.abs(activeIndex - i) <= 1 || (i === 0 && activeIndex === n - 1) || (i === n - 1 && activeIndex === 0) ? 1 : 0.35,
+                    }}
+                    transition={{ duration: 0.45 }}
+                  >
+                    <div className="fyw-built__carousel-card-header">
+                      <p className="fyw-service-card__tag">
+                        {domainMeta?.label || 'Web Development'}
+                      </p>
+                      <h3>{p.title}</h3>
+                    </div>
 
-          <div className="fyw-built__media-col">
-            <p className="fyw-stack-card__meta-k fyw-built__media-hint">Scroll to explore</p>
-            <div className="fyw-built__media-frame">
-              <DesktopWindow>
-                {projects.map((p, i) => {
-                  const src = portfolioHeroImage(p)
-                  return (
-                    <motion.div
-                      key={p.id}
-                      className="fyw-built__media-slide"
-                      initial={false}
-                      animate={{
-                        opacity: i === activeIndex ? 1 : 0,
-                        scale: i === activeIndex ? 1 : 0.985,
-                        zIndex: i === activeIndex ? 2 : 0,
-                      }}
-                      transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-                    >
-                      {src ? (
-                        <img src={src} alt="" loading="lazy" decoding="async" />
-                      ) : (
-                        <div
-                          className="fyw-built__img-placeholder fyw-built__img-placeholder--large fyw-built__img-placeholder--in-window"
-                          style={{ '--built-placeholder': domainMeta?.color || '#ff6b6b' }}
-                        >
-                          <span aria-hidden>{(p.title || '?').slice(0, 1)}</span>
+                    <div className="fyw-built__carousel-card-body">
+                      <div className="fyw-built__carousel-image-side">
+                        <div className="fyw-built__carousel-image-wrap">
+                          {src ? (
+                            <img src={src} alt="" loading="lazy" decoding="async" />
+                          ) : (
+                            <div
+                              className="fyw-built__img-placeholder fyw-built__img-placeholder--in-window"
+                              style={{ '--built-placeholder': domainMeta?.color || '#ff6b6b' }}
+                            >
+                              <span aria-hidden>{(p.title || '?').slice(0, 1)}</span>
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </motion.div>
-                  )
-                })}
-              </DesktopWindow>
-            </div>
-          </div>
+                      </div>
+
+                      <div className="fyw-built__carousel-details-side">
+                        <p className="fyw-service-card__desc">
+                          {p.shortDescription || p.fullDescription}
+                        </p>
+
+                        <div className="fyw-built__tech-side">
+                          <p className="fyw-built__tech-title">Technologies</p>
+                          <div className="fyw-built__tech-list">
+                            {(p.technologies || []).map((tech) => (
+                              <span key={tech} className="fyw-built__tech-chip">
+                                {tech}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="fyw-built__links">
+                          <Link
+                            className="fyw-built__cta-link fyw-built__cta-link--primary"
+                            to="/#projects"
+                          >
+                            View details
+                          </Link>
+                          {href && (
+                            <a
+                              className="fyw-built__cta-link fyw-built__cta-link--secondary"
+                              href={href}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              Live site
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                </div>
+              )
+            })}
+          </motion.div>
+        </div>
+
+        {/* Snap point markers for vertical scrolling */}
+        {Array.from({ length: n }).map((_, i) => (
+          <div
+            key={i}
+            className="fyw-built__snap-point"
+            style={{
+              top: `${(i / (n - 1)) * 100}%`,
+              position: 'absolute',
+              height: '1px',
+              width: '100%',
+              pointerEvents: 'none',
+              scrollSnapAlign: 'start',
+              scrollSnapStop: 'always',
+            }}
+          />
+        ))}
+
+        {/* Floating background hints */}
+        <div className="fyw-built__carousel-hint">
+          <p className="fyw-stack-card__meta-k">Scroll or Swipe to revolve</p>
         </div>
       </div>
     </div>
@@ -283,29 +341,32 @@ export default function BuiltSection() {
 
   return (
     <section id="built" className="fyw-section fyw-built" aria-labelledby="fyw-built-heading">
-      <div className="fyw-container fyw-built__scroll-inner fyw-built__header">
-        <motion.h2
-          id="fyw-built-heading"
-          className="fyw-section__title"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={vp}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        >
-          CortiqX is <span className="fyw-gradient-text">built</span>
-        </motion.h2>
-        <motion.p
-          className="fyw-section__lede"
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={vp}
-          transition={{ duration: 0.45, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
-        >
-          Web development work from our portfolio—details and previews update as you scroll.
-        </motion.p>
-      </div>
-
-      <BuiltScrollScene projects={projects} />
+      <BuiltScrollScene
+        projects={projects}
+        header={
+          <div className="fyw-built__header">
+            <motion.h2
+              id="fyw-built-heading"
+              className="fyw-section__title"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={vp}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            >
+              CortiqX is <span className="fyw-gradient-text">built</span>
+            </motion.h2>
+            <motion.p
+              className="fyw-section__lede"
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={vp}
+              transition={{ duration: 0.45, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
+            >
+              Web development work from our portfolio—details and previews update as you scroll.
+            </motion.p>
+          </div>
+        }
+      />
     </section>
   )
 }

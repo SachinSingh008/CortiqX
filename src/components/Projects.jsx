@@ -22,22 +22,12 @@ import { useMediaQuery } from '../hooks/useMediaQuery.js'
 
 const sectionVp = { once: false, amount: 0.12, margin: '0px 0px -8% 0px' }
 
-/** Scroll progress where the deck is fully formed; remainder = scroll past stack */
-const BUILD_END = 0.78
-/** Share of total progress where only project 0 is shown full (before stacking starts) */
-const CARD0_HOLD = 0.16
-
 const PEEK_DESKTOP = 13
 
-/** Longer first-card beat + build window on phones — needs full track height (see ScrollStackScene). */
-function stackScrollTiming(isNarrow, isTablet) {
-  if (isNarrow) return { card0Hold: 0.24, buildEnd: 0.8 }
-  if (isTablet) return { card0Hold: 0.18, buildEnd: 0.78 }
-  return { card0Hold: CARD0_HOLD, buildEnd: BUILD_END }
-}
-
 function easeStack(t) {
-  return 1 - (1 - Math.min(1, Math.max(0, t))) ** 2.35
+  const x = Math.min(1, Math.max(0, t))
+  // Ease-in-out cubic for a smooth start and end, creating a natural 'gap' feel
+  return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2
 }
 
 /** Wider rim on small viewports so tall mobile cards still read as a deck, not one slab. */
@@ -49,7 +39,8 @@ function stackPeekPx(isNarrow, isTablet) {
 
 function computeCardY(i, n, t, enterBoost, peek, timing) {
   const { card0Hold, buildEnd } = timing
-  const hidden = enterBoost + 240 + i * 28
+  // Start cards slightly further down so they don't 'peek' too early
+  const hidden = enterBoost + 320 + i * 32
 
   if (t >= buildEnd) {
     return (n - 1 - i) * peek
@@ -74,7 +65,8 @@ function computeCardY(i, n, t, enterBoost, peek, timing) {
   if (i > m) return hidden
 
   if (i === m) {
-    return (1 - e) * enterBoost + e * 0
+    // Start exactly from 'hidden' to avoid the snap jump
+    return (1 - e) * hidden + e * 0
   }
 
   const fromY = (m - 1 - i) * peek
@@ -198,13 +190,13 @@ function StackScrollLayer({ project, index, total, progress, enterBoost, peek, t
 }
 
 function useEnterBoost() {
-  const [px, setPx] = useState(820)
+  const [px, setPx] = useState(900)
 
   useEffect(() => {
     const u = () => {
       const h = window.innerHeight
-      /* Slightly less than desktop but enough travel that each card visibly rises in. */
-      const factor = window.innerWidth <= 640 ? 0.72 : 0.88
+      // Generous travel distance so each card visibly rises from below
+      const factor = window.innerWidth <= 640 ? 0.85 : 1.0
       setPx(Math.round(h * factor))
     }
     u()
@@ -229,7 +221,7 @@ function SimpleProjectList({ projects }) {
   )
 }
 
-function ScrollStackScene({ projects }) {
+function ScrollStackScene({ projects, header }) {
   const trackRef = useRef(null)
   const enterBoost = useEnterBoost()
   const n = projects.length
@@ -237,47 +229,55 @@ function ScrollStackScene({ projects }) {
   const isTablet = useMediaQuery('(max-width: 900px)')
   const isWideDesktop = useMediaQuery('(min-width: 1441px)')
 
+  // Discrete timing: each card takes exactly 100vh of scroll distance
+  const vhPerCard = 100 
+  const holdVh = 100
+  const tailVh = 100 
+  
+  const totalAnimVh = Math.max(0, n - 1) * vhPerCard
+  const trackVh = totalAnimVh + holdVh + tailVh
+  
+  const timing = {
+    card0Hold: holdVh / trackVh,
+    buildEnd: (holdVh + totalAnimVh) / trackVh
+  }
+
   const { scrollYProgress } = useScroll({
     target: trackRef,
     offset: ['start start', 'end end'],
   })
 
-  /* Short track + soft spring made mobile scroll rush through all cards at once. */
-  const progress = useSpring(
-    scrollYProgress,
-    isNarrow
-      ? { stiffness: 180, damping: 32, mass: 0.22, restDelta: 0.0004 }
-      : isTablet
-        ? { stiffness: 100, damping: 30, mass: 0.28, restDelta: 0.0003 }
-        : { stiffness: 52, damping: 28, mass: 0.32, restDelta: 0.00025 }
-  )
+  // Tight, snappy spring for precise discrete movement
+  const progress = useSpring(scrollYProgress, { 
+    stiffness: 60, damping: 32, mass: 0.5, restDelta: 0.0002 
+  })
 
   const peek = stackPeekPx(isNarrow, isTablet)
-  const timing = stackScrollTiming(isNarrow, isTablet)
-  const baseTrackVh = 96 + n * 28
-  /** Mobile needs ~full desktop scroll distance so 0→1 progress maps to readable per-card phases. */
-  const trackVh = (() => {
-    if (isNarrow) return Math.max(baseTrackVh, 102 + n * 34)
-    if (isTablet) return Math.max(Math.round(baseTrackVh * 0.9), 96 + n * 30)
-    if (isWideDesktop) {
-      return Math.max(Math.round(baseTrackVh * 0.86), 78 + n * 23)
-    }
-    return baseTrackVh
-  })()
-
-  const pinPaddingBottom = Math.min(
-    isWideDesktop ? 168 : 240,
-    (n - 1) * peek + (isWideDesktop ? 72 : 120)
-  )
+  const pinPaddingBottom = (n - 1) * peek + (isWideDesktop ? 72 : 120)
 
   return (
-    <div ref={trackRef} className="fyw-stack-scene" style={{ height: `${trackVh}vh` }}>
+    <div
+      ref={trackRef}
+      className="fyw-stack-scene"
+      style={{
+        height: `${trackVh}vh`,
+        scrollSnapType: 'y mandatory',
+        overflow: 'visible',
+      }}
+    >
       <div
         className="fyw-stack-scene__pin"
         style={{
           paddingBottom: pinPaddingBottom,
         }}
       >
+        {/* Sticky Header: Visible throughout the stack movement */}
+        <div className="fyw-stack-scene__sticky-header">
+           <div className="fyw-container">
+            {header}
+           </div>
+        </div>
+
         <div className="fyw-container fyw-stack-scene__layers">
           {projects.map((project, index) => (
             <StackScrollLayer
@@ -293,6 +293,31 @@ function ScrollStackScene({ projects }) {
           ))}
         </div>
       </div>
+
+      {/* Snap points for discrete scrolling: One notch = one card */}
+      {Array.from({ length: n }).map((_, i) => {
+          const { card0Hold, buildEnd } = timing
+          const buildSpan = buildEnd - card0Hold
+          const seg = buildSpan / Math.max(n - 1, 1)
+          const snapT = i === 0 ? 0 : card0Hold + (i - 1) * seg + seg / 2
+          // Note: i=0 is start. i=1 is when card 1 lands, etc.
+          // We adjust snap points to be in the 'holding' phase of each card.
+          return (
+            <div
+              key={i}
+              className="fyw-stack-scene__snap-marker"
+              style={{
+                position: 'absolute',
+                top: `${snapT * 100}%`,
+                height: '1px',
+                width: '100%',
+                pointerEvents: 'none',
+                scrollSnapAlign: 'start',
+                scrollSnapStop: 'always',
+              }}
+            />
+          )
+        })}
     </div>
   )
 }
@@ -309,7 +334,7 @@ function usePublishedFeaturedProjects() {
           .map((d) => normalizeFeaturedProject(d.data(), d.id))
           .filter((p) => p.published)
           .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-          
+
         // Precache images ASAP
         list.forEach((p) => {
           if (p.image) {
@@ -317,7 +342,7 @@ function usePublishedFeaturedProjects() {
             img.src = p.image
           }
         })
-        
+
         setProjects(list)
         setReady(true)
       },
@@ -335,45 +360,49 @@ function usePublishedFeaturedProjects() {
 
 export default function Projects() {
   const reduceMotion = useReducedMotion()
-  const isLaptopViewport = useMediaQuery('(min-width: 901px) and (max-width: 1440px)')
   const useSimpleList = reduceMotion === true
-  /** Laptops: skip scroll-stack (~10× less vertical scroll vs desktop track) — use compact list */
-  const useScrollStack = !useSimpleList && !isLaptopViewport
+  // All viewports use the scroll stack now — the track is tall enough to be readable everywhere
+  const useScrollStack = !useSimpleList
   const { projects, ready } = usePublishedFeaturedProjects()
 
   if (!ready) return null
   if (projects.length === 0) return null
+
+  const header = (
+    <>
+      <motion.h2
+        className="fyw-section__title"
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={sectionVp}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      >
+        Featured projects
+      </motion.h2>
+      <motion.p
+        className="fyw-section__lede"
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={sectionVp}
+        transition={{ duration: 0.45, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
+      >
+        Discover how our technology-driven solutions empower businesses and turn ideas into real, impactful products.
+      </motion.p>
+    </>
+  )
 
   return (
     <section
       id="projects"
       className={`fyw-section fyw-projects fyw-projects--stack${useScrollStack ? '' : ' fyw-projects--no-scroll-stack'}`}
     >
-      <div className="fyw-container">
-        <motion.h2
-          className="fyw-section__title"
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={sectionVp}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        >
-          Featured projects
-        </motion.h2>
-        <motion.p
-          className="fyw-section__lede"
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={sectionVp}
-          transition={{ duration: 0.45, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
-        >
-          Discover how our technology-driven solutions empower businesses and turn ideas into real, impactful products.
-        </motion.p>
-      </div>
-
       {useScrollStack ? (
-        <ScrollStackScene projects={projects} />
+        <ScrollStackScene projects={projects} header={header} />
       ) : (
-        <SimpleProjectList projects={projects} />
+        <div className="fyw-container">
+          {header}
+          <SimpleProjectList projects={projects} />
+        </div>
       )}
     </section>
   )

@@ -125,23 +125,26 @@ function HowProcessRail({ progress, steps: items, railScrollRef, activeStep }) {
 }
 
 export default function HowItWorks() {
-  const sectionRef = useRef(null)
+  const trackRef = useRef(null)
   const railScrollRef = useRef(null)
   const detailScrollRef = useRef(null)
   const reduceMotion = useReducedMotion()
   const [activeStep, setActiveStep] = useState(0)
 
+  // Track is 400vh to give plenty of room for 5 stages
+  const trackVh = 400
+
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    /* End the timeline while the section still occupies the lower viewport so the
-       last bit of scroll mostly exits “How it works” instead of scrubbing at 100%. */
-    offset: ['start 0.76', 'end 0.55'],
+    target: trackRef,
+    offset: ['start start', 'end end'],
   })
 
+  // Smooth out the scroll progress for a high-end feel
   const progress = useSpring(scrollYProgress, {
-    stiffness: reduceMotion ? 360 : 100,
-    damping: reduceMotion ? 46 : 30,
-    mass: reduceMotion ? 0.16 : 0.4,
+    stiffness: 60,
+    damping: 32,
+    mass: 0.5,
+    restDelta: 0.0002,
   })
 
   const applyMobileScrollSync = (latest) => {
@@ -193,64 +196,68 @@ export default function HowItWorks() {
   }, [progress])
 
   return (
-    <section id="how-it-works" ref={sectionRef} className="fyw-section fyw-how">
-      <div className="fyw-container fyw-how__inner">
-        <div className="fyw-how__title-block">
-          <motion.h2
-            className="fyw-how__title-vertical"
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={vp}
-          >
-            <span className="fyw-how__title-line">HOW</span>
-            <span className="fyw-how__title-line">IT</span>
-            <span className="fyw-how__title-line fyw-how__title-line--accent">WORKS</span>
-          </motion.h2>
-          <p className="fyw-how__title-tagline">Five stages from first call to stores</p>
-        </div>
+    <section ref={trackRef} className="fyw-how-track" style={{ height: `${trackVh}vh` }}>
+      <div className="fyw-how-pin">
+        <div id="how-it-works" className="fyw-section fyw-how">
+          <div className="fyw-container fyw-how__inner">
+            <div className="fyw-how__title-block">
+              <motion.h2
+                className="fyw-how__title-vertical"
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={vp}
+              >
+                <span className="fyw-how__title-line">HOW</span>
+                <span className="fyw-how__title-line">IT</span>
+                <span className="fyw-how__title-line fyw-how__title-line--accent">WORKS</span>
+              </motion.h2>
+              <p className="fyw-how__title-tagline">Five stages from first call to stores</p>
+            </div>
 
-        <div className="fyw-how__column">
-          <motion.p
-            className="fyw-section__lede fyw-how__lede"
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={vp}
-            transition={{ delay: 0.04 }}
-          >
-            Our streamlined process for building
-            <br className="fyw-how__lede-br" />
-            high-quality Flutter apps.
-          </motion.p>
+            <div className="fyw-how__column">
+              <motion.p
+                className="fyw-section__lede fyw-how__lede"
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={vp}
+                transition={{ delay: 0.04 }}
+              >
+                Our streamlined process for building
+                <br className="fyw-how__lede-br" />
+                high-quality Flutter apps.
+              </motion.p>
 
-          <HowProcessRail
-            progress={progress}
-            steps={steps}
-            railScrollRef={railScrollRef}
-            activeStep={activeStep}
-          />
+              <HowProcessRail
+                progress={progress}
+                steps={steps}
+                railScrollRef={railScrollRef}
+                activeStep={activeStep}
+              />
 
-          <div
-            ref={detailScrollRef}
-            className="fyw-how__detail-scroll"
-            role="region"
-            aria-label="Step details — follow page scroll on mobile"
-            tabIndex={0}
-          >
-            <div className="fyw-how__detail-grid">
-              {steps.map((step, i) => (
-                <motion.article
-                  key={step.n}
-                  className={`fyw-how__detail${activeStep === i ? ' fyw-how__detail--active' : ''}`}
-                  initial={{ opacity: 0, y: 18 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ delay: i * 0.05, duration: 0.45 }}
-                >
-                  <p className="fyw-how__detail-kicker">Step {step.n}</p>
-                  <h3>{step.title}</h3>
-                  <p>{step.desc}</p>
-                </motion.article>
-              ))}
+              <div
+                ref={detailScrollRef}
+                className="fyw-how__detail-scroll"
+                role="region"
+                aria-label="Step details — follow page scroll on mobile"
+                tabIndex={0}
+              >
+                <div className="fyw-how__detail-grid">
+                  {steps.map((step, i) => (
+                    <motion.article
+                      key={step.n}
+                      className={`fyw-how__detail${activeStep === i ? ' fyw-how__detail--active' : ''}`}
+                      initial={{ opacity: 0, y: 18 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
+                      transition={{ delay: i * 0.05, duration: 0.45 }}
+                    >
+                      <p className="fyw-how__detail-kicker">Step {step.n}</p>
+                      <h3>{step.title}</h3>
+                      <p>{step.desc}</p>
+                    </motion.article>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>

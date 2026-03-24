@@ -13,7 +13,7 @@ export default function TransformCta() {
           LET&apos;S TRANSFORM YOUR IDEA INTO REALITY
         </motion.h2>
         <motion.a
-          href="#contact"
+          href="/#contact"
           className="fyw-btn fyw-btn--primary fyw-btn--lg"
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}

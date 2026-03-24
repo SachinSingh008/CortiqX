@@ -8,12 +8,14 @@ import PricingPage from './pages/PricingPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import ProtectedRoute from './portal/ProtectedRoute.jsx'
 import CreateSuperAdmin from './portal/CreateSuperAdmin.jsx'
+import ScrollToAnchor from './components/ScrollToAnchor.jsx'
 
 export default function App() {
   return (
     <AuthProvider>
       <UserProvider>
         <BrowserRouter>
+          <ScrollToAnchor />
           <Routes>
             <Route element={<Layout />}>
               <Route path="/" element={<Home />} />
