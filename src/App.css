@@ -1862,27 +1862,27 @@ details[open].fyw-mobile-acc summary::after {
   top: 64px;
   overflow: visible;
   /* Enough for first card; avoids a full viewport of dead space under the rim stack */
-  min-height: min(calc(100dvh - 64px), 720px);
+  min-height: min(calc(100dvh - 64px), 880px);
 }
 
 @media (max-width: 900px) {
   .fyw-stack-scene__pin {
     /* Room for one tall mobile card + visible stacked rims */
-    min-height: min(calc(100dvh - 64px), 580px);
+    min-height: min(calc(100dvh - 64px), 860px);
   }
 
   .fyw-stack-scene__layers {
-    min-height: min(58dvh, 520px);
+    min-height: min(78dvh, 760px);
   }
 }
 
 @media (max-width: 480px) {
   .fyw-stack-scene__pin {
-    min-height: min(calc(100dvh - 64px), 540px);
+    min-height: min(calc(100dvh - 64px), 860px);
   }
 
   .fyw-stack-scene__layers {
-    min-height: min(54dvh, 500px);
+    min-height: min(82dvh, 760px);
   }
 }
 
@@ -1891,7 +1891,7 @@ details[open].fyw-mobile-acc summary::after {
   width: 100%;
   isolation: isolate;
   /* ~one tall card; absolute layers do not stretch the box */
-  min-height: min(58vh, 560px);
+  min-height: min(68vh, 760px);
 }
 
 .fyw-stack-scene__layer {
