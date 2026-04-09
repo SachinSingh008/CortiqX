@@ -1990,8 +1990,8 @@ details[open].fyw-mobile-acc summary::after {
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: 28px;
-  padding: clamp(24px, 4vw, 40px);
+  gap: 16px;
+  padding: clamp(20px, 4vw, 40px);
 }
 
 .fyw-stack-card__copy {
@@ -2036,7 +2036,7 @@ details[open].fyw-mobile-acc summary::after {
   line-height: 1.22;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  margin: 0 0 1.35rem;
+  margin: 0 0 0.95rem;
   overflow-wrap: anywhere;
 }
 
@@ -2051,8 +2051,8 @@ details[open].fyw-mobile-acc summary::after {
 
 .fyw-stack-card__meta {
   display: grid;
-  gap: 14px;
-  margin-bottom: 28px;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .fyw-stack-card__meta-cell {
@@ -2073,7 +2073,7 @@ details[open].fyw-mobile-acc summary::after {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--fyw-muted);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .fyw-stack-card__meta-v {
@@ -2120,7 +2120,7 @@ details[open].fyw-mobile-acc summary::after {
 
 .fyw-stack-card__visual--photo {
   align-items: flex-end;
-  min-height: 200px;
+  min-height: 160px;
 }
 
 .fyw-stack-card__photo {
