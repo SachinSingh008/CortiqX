@@ -1,6 +1,5 @@
 import Hero from '../components/Hero.jsx'
 import Services from '../components/Services.jsx'
-import Pricing from '../components/Pricing.jsx'
 import WhyUs from '../components/WhyUs.jsx'
 import HowItWorks from '../components/HowItWorks.jsx'
 import TransformCta from '../components/TransformCta.jsx'
@@ -15,7 +14,6 @@ export default function Home() {
     <>
       <Hero />
       <Services />
-      <Pricing />
       <WhyUs />
       <HowItWorks />
       <TransformCta />

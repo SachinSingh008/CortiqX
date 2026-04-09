@@ -61,7 +61,7 @@ function activeStepIndex(t) {
   return Math.min(4, Math.max(0, Math.floor(Number(t) * 5)))
 }
 
-function HowProcessRail({ progress, steps: items, railScrollRef, activeStep }) {
+function HowProcessRail({ progress, steps: items, railScrollRef, activeStep, isMobile }) {
   const lineFill = useTransform(progress, [0, 1], [0, 1])
   const s0 = useStepReveal(progress, 0, 0.16)
   const s1 = useStepReveal(progress, 0.17, 0.33)
@@ -97,7 +97,7 @@ function HowProcessRail({ progress, steps: items, railScrollRef, activeStep }) {
                 <motion.div
                   key={step.n}
                   className={`fyw-how-rail__stop${activeStep === i ? ' fyw-how-rail__stop--active' : ''}`}
-                  style={{ opacity: stopsMotion[i].opacity, y: stopsMotion[i].y }}
+                  style={isMobile ? { opacity: 1, y: 0 } : { opacity: stopsMotion[i].opacity, y: stopsMotion[i].y }}
                   aria-hidden
                 >
                   <span className="fyw-how-rail__dot" />
@@ -130,6 +130,9 @@ export default function HowItWorks() {
   const detailScrollRef = useRef(null)
   const reduceMotion = useReducedMotion()
   const [activeStep, setActiveStep] = useState(0)
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== 'undefined' ? window.matchMedia('(max-width: 767px)').matches : false
+  )
 
   // Track is 400vh to give plenty of room for 5 stages
   const trackVh = 400
@@ -165,18 +168,12 @@ export default function HowItWorks() {
   useLayoutEffect(() => {
     const mq = window.matchMedia('(max-width: 767px)')
     const v = progress.get()
+    const onMq = () => setIsMobile(mq.matches)
+    onMq()
+    mq.addEventListener('change', onMq)
+    
     if (mq.matches) setActiveStep(activeStepIndex(v))
     applyMobileScrollSync(v)
-
-    const onMq = () => {
-      const t = progress.get()
-      if (mq.matches) {
-        setActiveStep(activeStepIndex(t))
-        syncScrollToProgress(railScrollRef.current, t)
-        syncScrollToProgress(detailScrollRef.current, t)
-      }
-    }
-    mq.addEventListener('change', onMq)
 
     const railEl = railScrollRef.current
     const detailEl = detailScrollRef.current
@@ -232,6 +229,7 @@ export default function HowItWorks() {
                 steps={steps}
                 railScrollRef={railScrollRef}
                 activeStep={activeStep}
+                isMobile={isMobile}
               />
 
               <div

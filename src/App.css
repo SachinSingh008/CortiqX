@@ -1396,6 +1396,7 @@ details[open].fyw-mobile-acc summary::after {
 @media (max-width: 767px) {
   .fyw-how-pin {
     height: 100dvh;
+    position: sticky;
   }
 }
 
@@ -1414,16 +1415,14 @@ details[open].fyw-mobile-acc summary::after {
 
 @media (max-width: 767px) {
   .fyw-how-rail__scroll {
-    overflow-x: auto;
+    overflow-x: hidden;
     overflow-y: visible;
-    scroll-snap-type: x proximity;
     overscroll-behavior-x: none;
     scroll-padding-inline: max(16px, env(safe-area-inset-left, 0px));
     margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
     padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
     padding-bottom: 10px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
+    scrollbar-width: none;
     mask-image: linear-gradient(90deg,
         transparent,
         #000 14px,
@@ -1502,8 +1501,6 @@ details[open].fyw-mobile-acc summary::after {
   .fyw-how-rail__stop {
     flex: 0 0 124px;
     min-width: 124px;
-    scroll-snap-align: center;
-    scroll-snap-stop: normal;
   }
 
   .fyw-how-rail__line {
@@ -1626,17 +1623,15 @@ details[open].fyw-mobile-acc summary::after {
 
 @media (max-width: 767px) {
   .fyw-how__detail-scroll {
-    overflow-x: auto;
+    overflow-x: hidden;
     overflow-y: visible;
-    scroll-snap-type: x proximity;
     overscroll-behavior-x: none;
     scroll-padding-inline: max(16px, env(safe-area-inset-left, 0px));
     margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
     padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
     padding-top: 24px;
     padding-bottom: 12px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
+    scrollbar-width: none;
     mask-image: linear-gradient(90deg,
         transparent,
         #000 14px,
@@ -1694,8 +1689,6 @@ details[open].fyw-mobile-acc summary::after {
   .fyw-how__detail {
     flex: 0 0 min(82vw, 300px);
     max-width: 300px;
-    scroll-snap-align: center;
-    scroll-snap-stop: normal;
     transition:
       border-color 0.35s var(--fyw-ease-soft),
       box-shadow 0.35s var(--fyw-ease-soft),

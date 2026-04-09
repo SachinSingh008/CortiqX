@@ -47,7 +47,7 @@ const navItems = [
         title: 'Learn & pricing',
         links: [
           ['Clients', '/#clients'],
-          ['Pricing', '/#pricing'],
+          ['Pricing', '/pricing'],
           ['Contact', '/#contact'],
         ],
       },
@@ -134,7 +134,7 @@ export default function Header() {
             </Link>
           </Magnetic>
           <Magnetic>
-            <Link to="/#pricing" className="fyw-nav__link">
+            <Link to="/pricing" className="fyw-nav__link">
               Pricing
             </Link>
           </Magnetic>
@@ -248,7 +248,7 @@ export default function Header() {
               <Link to="/#clients" onClick={() => setMobileOpen(false)}>
                 Clients
               </Link>
-              <Link to="/#pricing" onClick={() => setMobileOpen(false)}>
+              <Link to="/pricing" onClick={() => setMobileOpen(false)}>
                 Pricing
               </Link>
               <Link to="/#contact" onClick={() => setMobileOpen(false)}>

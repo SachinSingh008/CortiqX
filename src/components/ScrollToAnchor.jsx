@@ -17,6 +17,8 @@ export default function ScrollToAnchor() {
                 scrollToElement(hash.slice(1))
             }, 100)
             return () => clearTimeout(timer)
+        } else {
+            window.scrollTo(0, 0)
         }
     }, [hash, pathname])
 
