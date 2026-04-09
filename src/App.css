@@ -1833,11 +1833,11 @@ details[open].fyw-mobile-acc summary::after {
 }
 
 .fyw-projects--stack .fyw-section__title {
-  margin-bottom: 12px;
+  margin-bottom: 2px;
 }
 
 .fyw-projects--stack .fyw-section__lede {
-  margin-bottom: clamp(32px, 5vh, 64px);
+  margin-bottom: clamp(12px, 3vh, 24px);
 }
 
 
@@ -1846,7 +1846,7 @@ details[open].fyw-mobile-acc summary::after {
 
 @media (max-width: 640px) {
   .fyw-projects--stack .fyw-section__lede {
-    margin-bottom: 20px;
+    margin-bottom: 8px;
   }
 }
 
