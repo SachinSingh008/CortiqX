@@ -1385,17 +1385,16 @@ details[open].fyw-mobile-acc summary::after {
 
 .fyw-how-pin {
   position: sticky;
-  top: 0;
-  height: 100vh;
+  top: 64px; /* Align near header instead of top zero */
+  padding: clamp(32px, 5vh, 64px) 0; /* Let the content dimensions dictate height instead of forcing 100vh */
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow: visible;
+  overflow: clip; /* Clip waiting elements instead of spilling */
 }
 
 @media (max-width: 767px) {
   .fyw-how-pin {
-    height: 100dvh;
     position: sticky;
   }
 }
@@ -1861,26 +1860,16 @@ details[open].fyw-mobile-acc summary::after {
   position: sticky;
   top: 64px;
   overflow: clip; /* Prevents hidden cards from incorrectly showing in large scaled layout viewports */
-  /* Enough for first card; avoids a full viewport of dead space under the rim stack */
-  min-height: min(calc(100dvh - 64px), 880px);
+  padding-bottom: 24px;
 }
 
 @media (max-width: 900px) {
-  .fyw-stack-scene__pin {
-    /* Room for one tall mobile card + visible stacked rims */
-    min-height: min(calc(100dvh - 64px), 860px);
-  }
-
   .fyw-stack-scene__layers {
     min-height: min(78dvh, 760px);
   }
 }
 
 @media (max-width: 480px) {
-  .fyw-stack-scene__pin {
-    min-height: min(calc(100dvh - 64px), 860px);
-  }
-
   .fyw-stack-scene__layers {
     min-height: min(82dvh, 760px);
   }
