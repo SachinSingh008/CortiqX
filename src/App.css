@@ -574,7 +574,7 @@ details[open].fyw-mobile-acc summary::after {
 
 /* Sections */
 .fyw-section {
-  padding: 88px 0;
+  padding: clamp(48px, 8vw, 88px) 0;
   scroll-margin-top: 84px;
 }
 
@@ -1860,7 +1860,7 @@ details[open].fyw-mobile-acc summary::after {
 .fyw-stack-scene__pin {
   position: sticky;
   top: 64px;
-  overflow: visible;
+  overflow: clip; /* Prevents hidden cards from incorrectly showing in large scaled layout viewports */
   /* Enough for first card; avoids a full viewport of dead space under the rim stack */
   min-height: min(calc(100dvh - 64px), 880px);
 }

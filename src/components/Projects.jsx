@@ -196,8 +196,9 @@ function useEnterBoost() {
     const u = () => {
       const h = window.innerHeight
       // Generous travel distance so each card visibly rises from below
+      // Enforce a strict minimum well beyond the 880px container max-height so they don't bleed out in scaled desktop views.
       const factor = window.innerWidth <= 640 ? 0.85 : 1.0
-      setPx(Math.round(h * factor))
+      setPx(Math.max(Math.round(h * factor), 1200))
     }
     u()
     window.addEventListener('resize', u)
